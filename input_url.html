@@ -1,0 +1,61 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image URL Input</title>
+</head>
+<body>
+  <label for="url">Enter Image URL:</label><br>
+  <input type="text" id="url" name="url" style="width: 300px;"><br><br>
+  <button onClick="submitUrl()">Submit</button>
+
+  <script>
+    function submitUrl() {
+      var urlInput = document.getElementById("url");
+      var url = urlInput.value;
+      localStorage.setItem("imageUrl", url);  // Store the URL in local storage
+      window.close();  // Close the pop-up window
+    }
+  </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Classifier</title>
+  <script>
+    function onSubmit() {
+      var url = document.getElementById('url_input').value;
+      fetch('/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: url }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('result').innerHTML = data.result_text;
+          document.getElementById('image').src = data.image_data;
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    }
+  </script>
+</head>
+
+<body>
+  <h1>Image Classifier</h1>
+  <input type="text" id="url_input" placeholder="Enter Image URL">
+  <button onclick="onSubmit()">Submit</button>
+  <div id="result"></div>
+  <img id="image" src="" alt="Image" style="max-width: 100%;">
+</body>
+
+</html>
